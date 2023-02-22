@@ -1,3 +1,5 @@
+// בס"ד
+
 export const storageService = {
     post,   // Create
     get,    // Read

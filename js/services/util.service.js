@@ -1,3 +1,5 @@
+// בס"ד
+
 export const utilService = {
     saveToStorage,
     loadFromStorage,
@@ -47,7 +49,7 @@ function randomPastTime() {
     const HOUR = 1000 * 60 * 60
     const DAY = 1000 * 60 * 60 * 24
     const WEEK = 1000 * 60 * 60 * 24 * 7
-    
+
     const pastTime = getRandomIntInclusive(HOUR, WEEK)
     return Date.now() - pastTime
 }
