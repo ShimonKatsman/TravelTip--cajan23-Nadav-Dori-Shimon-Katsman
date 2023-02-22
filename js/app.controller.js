@@ -1,3 +1,5 @@
+// בס"ד
+
 import { locService } from './services/loc.service.js'
 import { mapService } from './services/map.service.js'
 import { palceService } from './services/palceService.js'
@@ -40,14 +42,14 @@ function onSreach(ev) {
 function renderPlaces(places) {
     const { id, name, location, createdAt } = places
     const strHtml = `<tr class="location-info ${id}">
-    <td>${id.slice(0,3)}</td>
+    <td>${id.slice(0, 3)}</td>
     <td>${name}</td>
     <td>${location.lat}</td>
     <td>${location.lng}</td>
     <td>${createdAt}</td>
     <td><button onclick="onRemove(${id})">X</button></td> 
 </tr>`
-document.querySelector('.table-body').innerHTML+=strHtml
+    document.querySelector('.table-body').innerHTML += strHtml
 }
 // This function provides a Promise API to the callback-based-api of getCurrentPosition
 function getPosition() {
