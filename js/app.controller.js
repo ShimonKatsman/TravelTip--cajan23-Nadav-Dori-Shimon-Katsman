@@ -31,7 +31,7 @@ function onSreach(ev) {
     let elInput = document.querySelector('[type="search"]')
     let sreachValue = elInput.value
     palceService.search(sreachValue)
-        .then(console.log)
+        .then(renderPlaces)
 
 
     console.log('value', elInput);
@@ -39,12 +39,13 @@ function onSreach(ev) {
 }
 function renderPlaces(places) {
     const { id, name, location, createdAt } = places
-    const strHtml = `<tr class="location-info">
-    <td>${id}</td>
+    const strHtml = `<tr class="location-info ${id}">
+    <td>${id.slice(0,3)}</td>
     <td>${name}</td>
     <td>${location.lat}</td>
     <td>${location.lng}</td>
     <td>${createdAt}</td>
+    <td><button onclick="onRemove(${id})">X</button></td> 
 </tr>`
 document.querySelector('.table-body').innerHTML+=strHtml
 }
