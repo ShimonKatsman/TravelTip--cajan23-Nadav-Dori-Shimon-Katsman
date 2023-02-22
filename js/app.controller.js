@@ -38,15 +38,16 @@ function onSreach(ev) {
 
 }
 function renderPlaces(places) {
-    const { id, name, location, createdAt } = places
-    const strHtml = `<tr class="location-info ${id}">
+    const { id, name, location, createdAt,updatedAt } = places
+    const strHtml = places.map(loc=>`<tr class="location-info ${id}">
     <td>${id.slice(0,3)}</td>
     <td>${name}</td>
     <td>${location.lat}</td>
     <td>${location.lng}</td>
     <td>${createdAt}</td>
+    <td>${updatedAt}</td>
     <td><button onclick="onRemove(${id})">X</button></td> 
-</tr>`
+</tr>`).join('')
 document.querySelector('.table-body').innerHTML+=strHtml
 }
 // This function provides a Promise API to the callback-based-api of getCurrentPosition
