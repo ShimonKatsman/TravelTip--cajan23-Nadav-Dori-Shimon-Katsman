@@ -22,6 +22,7 @@ function _createDemoPlaces() {
 
 }
 function search(sreachValue) {
+ 
     return fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${sreachValue}&key=${GEO_key}`)
         .then(res => res.json())
         .then(res => ({
