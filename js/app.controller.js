@@ -1,12 +1,16 @@
 import { locService } from './services/loc.service.js'
 import { mapService } from './services/map.service.js'
+import { palceService } from './services/palceService.js'
 
 window.onload = onInit
 window.onAddMarker = onAddMarker
 window.onPanTo = onPanTo
 window.onGetLocs = onGetLocs
 window.onGetUserPos = onGetUserPos
+window.onSreach = onSreach
 
+
+//https://maps.googleapis.com/maps/api/geocode/json?address= &key=AIzaSyDIEKT0NOd__sBTWlouu15_p9C8d4jlkA4
 function onInit() {
     mapService.initMap()
         .then(() => {
@@ -15,6 +19,35 @@ function onInit() {
         .catch(() => console.log('Error: cannot init map'))
 }
 
+// function onAddPet() {
+//     const newPet = petService.getEmptyPet()
+//     newPet.name = utilService.randomPetName()
+//     console.log('newPet', newPet)
+//     petService.save(newPet).then(loadPets)
+
+// }
+function onSreach(ev) {
+    ev.preventDefault()
+    let elInput = document.querySelector('[type="search"]')
+    let sreachValue = elInput.value
+    palceService.search(sreachValue)
+        .then(console.log)
+
+
+    console.log('value', elInput);
+
+}
+function renderPlaces(places) {
+    const { id, name, location, createdAt } = places
+    const strHtml = `<tr class="location-info">
+    <td>${id}</td>
+    <td>${name}</td>
+    <td>${location.lat}</td>
+    <td>${location.lng}</td>
+    <td>${createdAt}</td>
+</tr>`
+document.querySelector('.table-body').innerHTML+=strHtml
+}
 // This function provides a Promise API to the callback-based-api of getCurrentPosition
 function getPosition() {
     console.log('Getting Pos')

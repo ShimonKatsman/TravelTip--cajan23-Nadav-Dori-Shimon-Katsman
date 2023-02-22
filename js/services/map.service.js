@@ -10,6 +10,7 @@ var gMap
 
 function initMap(lat = 32.0749831, lng = 34.9120554) {
     console.log('InitMap')
+
     return _connectGoogleApi()
         .then(() => {
             console.log('google available')
@@ -18,8 +19,15 @@ function initMap(lat = 32.0749831, lng = 34.9120554) {
                 center: { lat, lng },
                 zoom: 15
             })
-            console.log('Map!', gMap)
-        })
+         
+            gMap.addListener("click", (mapsMouseEvent) => {
+             
+               const{lat,lng}=(mapsMouseEvent.latLng.toJSON());
+                panTo(lat, lng)
+                
+              });
+            
+        })     
 }
 
 function addMarker(loc) {
