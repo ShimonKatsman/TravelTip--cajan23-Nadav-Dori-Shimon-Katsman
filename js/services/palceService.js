@@ -6,8 +6,8 @@ export const palceService = {
     search,
 }
 const GEO_key = 'AIzaSyDIEKT0NOd__sBTWlouu15_p9C8d4jlkA4'
-const PLACE_KEY = 'newPlace'
-_createDemoPlaces()
+const PLACE_KEY = 'newPlaces'
+// _createDemoPlaces()
 
 function _createDemoPlaces() {
     let places = utilService.loadFromStorage(PLACE_KEY)
@@ -21,8 +21,11 @@ function _createDemoPlaces() {
 
 
 }
-function search(sreachValue) {
-    return fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${sreachValue}&key=${GEO_key}`)
+function search(searchValue) {
+    const termLocationMap = utilService.loadFromStorage(PLACE_KEY) || {}
+    if (termLocationMap[searchValue]) return Promise.resolve(termLocationMap[searchValue])
+
+    return fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${searchValue}&key=${GEO_key}`)
         .then(res => res.json())
         .then(res => ({
             name: res.results[0].formatted_address,
@@ -30,7 +33,13 @@ function search(sreachValue) {
             id: res.results[0].place_id,
             createdAt: Date.now(),
             updatedAt: 0,
-        }))
+        })).then(res => {
+            termLocationMap[searchValue] = res
+            utilService.saveToStorage(PLACE_KEY, termLocationMap)
+            console.log('hi');
+            
+            return res
+        })
     //.catch(err=>alert('no place found'))
 }
 

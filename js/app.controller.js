@@ -9,7 +9,7 @@ window.onAddMarker = onAddMarker
 window.onPanTo = onPanTo
 window.onGetLocs = onGetLocs
 window.onGetUserPos = onGetUserPos
-window.onSreach = onSreach
+window.onSearch = onSearch
 
 
 //https://maps.googleapis.com/maps/api/geocode/json?address= &key=AIzaSyDIEKT0NOd__sBTWlouu15_p9C8d4jlkA4
@@ -28,31 +28,26 @@ function onInit() {
 //     petService.save(newPet).then(loadPets)
 
 // }
-function onSreach(ev) {
+function onSearch(ev) {
     ev.preventDefault()
     let elInput = document.querySelector('[type="search"]')
-    let sreachValue = elInput.value
-    palceService.search(sreachValue)
+    let searchValue = elInput.value
+    palceService.search(searchValue)
         .then(renderPlaces)
-
-
-    console.log('value', elInput);
-
+    // console.log('value', elInput);
 }
 function renderPlaces(places) {
     const { id, name, location, createdAt, updatedAt } = places
     const strHtml = `<tr class="location-info ${id}">
     <td>${id.slice(0, 3)}</td>
-    const { id, name, location, createdAt } = places
     <td>${name}</td>
     <td>${location.lat}</td>
     <td>${location.lng}</td>
     <td>${createdAt}</td>
     <td>${updatedAt}</td>
-    <td><button onclick="onRemove(${id})">X</button></td></tr> `
+    <td><button onclick="onPanTo(${location.lat}, ${location.lng})">GO</button><button onclick="onRemove(${id})">X</button></td></tr> `
     document.querySelector('.table-body').innerHTML += strHtml
-
-    document.querySelector('.table-body').innerHTML += strHtml
+    // console.log('location',location)
 }
 // This function provides a Promise API to the callback-based-api of getCurrentPosition
 function getPosition() {
@@ -86,7 +81,7 @@ function onGetUserPos() {
             console.log('err!!!', err)
         })
 }
-function onPanTo() {
-    console.log('Panning the Map')
-    mapService.panTo(35.6895, 139.6917)
+function onPanTo(lat, lng) {
+    console.log(+lat, +lng)
+    mapService.panTo(+lat, +lng)
 }
