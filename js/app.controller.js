@@ -10,6 +10,8 @@ window.onPanTo = onPanTo
 window.onGetLocs = onGetLocs
 window.onGetUserPos = onGetUserPos
 window.onSearch = onSearch
+window.onRemove = onRemove
+window.onMyLocation=onMyLocation
 
 
 //https://maps.googleapis.com/maps/api/geocode/json?address= &key=AIzaSyDIEKT0NOd__sBTWlouu15_p9C8d4jlkA4
@@ -19,6 +21,7 @@ function onInit() {
             console.log('Map is ready')
         })
         .catch(() => console.log('Error: cannot init map'))
+    renderPlaces(palceService.getLocations())
 }
 
 // function onAddPet() {
@@ -36,17 +39,22 @@ function onSearch(ev) {
         .then(renderPlaces)
     // console.log('value', elInput);
 }
+
 function renderPlaces(places) {
-    const { id, name, location, createdAt, updatedAt } = places
-    const strHtml = `<tr class="location-info ${id}">
-    <td>${id.slice(0, 3)}</td>
-    <td>${name}</td>
-    <td>${location.lat}</td>
-    <td>${location.lng}</td>
-    <td>${createdAt}</td>
-    <td>${updatedAt}</td>
-    <td><button onclick="onPanTo(${location.lat}, ${location.lng})">GO</button><button onclick="onRemove(${id})">X</button></td></tr> `
-    document.querySelector('.table-body').innerHTML += strHtml
+    console.log('places', places);
+    let elTable = document.querySelector('.table-body')
+    elTable.innerHTML = ''
+    if (places.length === 0) return
+    // const { id, name, location, createdAt, updatedAt } = places
+    const strHtml = places.map(location => `<tr class="location-info ${location.id}">
+    <td>${location.id.slice(0, 3)}</td>
+    <td>${location.name}</td>
+    <td>${location.location.lat}</td>
+    <td>${location.location.lng}</td>
+    <td>${location.createdAt}</td>
+    <td>${location.updatedAt}</td>
+    <td><button onclick="onPanTo(${location.location.lat}, ${location.location.lng})">GO</button><button onclick="onRemove('${location.id}')">X</button></td></tr> `).join('')
+    elTable.innerHTML += strHtml
     // console.log('location',location)
 }
 // This function provides a Promise API to the callback-based-api of getCurrentPosition
@@ -56,7 +64,11 @@ function getPosition() {
         navigator.geolocation.getCurrentPosition(resolve, reject)
     })
 }
-
+function onRemove(id) {
+    palceService.remove(id)
+    let locations = palceService.getLocations()
+    renderPlaces(locations)
+}
 function onAddMarker() {
     console.log('Adding a marker')
     mapService.addMarker({ lat: 32.0749831, lng: 34.9120554 })
@@ -69,7 +81,12 @@ function onGetLocs() {
             document.querySelector('.locs').innerText = JSON.stringify(locs, null, 2)
         })
 }
+function onMyLocation() {
 
+    getPosition()
+
+        .then(pos=>onPanTo(pos.coords.latitude,pos.coords.longitude))
+}
 function onGetUserPos() {
     getPosition()
         .then(pos => {
